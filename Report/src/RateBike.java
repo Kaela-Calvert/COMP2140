@@ -9,10 +9,12 @@ import java.awt.image.BufferedImage;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+
 public class RateBike extends JFrame {
     private JTextField bikeID = new JTextField(20);
     private JTextField grade = new JTextField(20);
     private JTextArea experience = new JTextArea();
+    private JTextArea improvements = new JTextArea();
 
     private JPanel pnlDisplay;
     private JPanel pnlPicture;
@@ -26,13 +28,14 @@ public class RateBike extends JFrame {
         setTitle("Rate a Bike");
         thisframe = this;
 
-        pnlDisplay = new JPanel(new GridLayout(3, 2));
+        pnlDisplay = new JPanel(new GridLayout(4, 2));
         pnlPicture = new JPanel();
         pnlButton = new JPanel();
 
         addLabelAndField("Please enter the Bike's ID:", bikeID);
         addLabelAndField("Letter Grade [A, B, C, D, E]:", grade);
         addLabelAndTextArea("Tell us about your riding experience:", experience);
+        addLabelAndTextArea("What are some improvements to be made:", improvements);
 
         BufferedImage myPicture = null;
         try {
@@ -51,6 +54,12 @@ public class RateBike extends JFrame {
         cmdMenu.addActionListener(new CloseButtonListener());
         cmdRate.addActionListener(new RateBikeButtonListener());
 
+
+
+        //thisframe.setBackground(Color.PINK);
+        cmdRate.setBackground(Color.GREEN); 
+        cmdMenu.setBackground(Color.GREEN);
+
         pnlButton.add(cmdMenu);
         pnlButton.add(cmdRate);
 
@@ -61,6 +70,7 @@ public class RateBike extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(700, 800);
         setLocationRelativeTo(null);
+        setResizable(false);
         setVisible(true);
     }
 
@@ -70,14 +80,21 @@ public class RateBike extends JFrame {
         rowPanel.add(textField);
         pnlDisplay.add(rowPanel);
     }
-
     private void addLabelAndTextArea(String labelText, JTextArea textArea) {
         JPanel rowPanel = new JPanel(new GridLayout(1, 2));
         rowPanel.add(new JLabel(labelText));
-        textArea = new JTextArea();
         rowPanel.add(new JScrollPane(textArea));
         pnlDisplay.add(rowPanel);
     }
+    
+
+    // private void addLabelAndTextArea(String labelText, JTextArea textArea) {
+    //     JPanel rowPanel = new JPanel(new GridLayout(1, 2));
+    //     rowPanel.add(new JLabel(labelText));
+    //     textArea = new JTextArea();
+    //     rowPanel.add(new JScrollPane(textArea));
+    //     pnlDisplay.add(rowPanel);
+    // }
 
     private boolean isValidGrade(String grade) {
         return grade.equals("A") || grade.equals("B") || grade.equals("C") || grade.equals("D");
@@ -98,11 +115,19 @@ public class RateBike extends JFrame {
                 Integer ID = Integer.parseInt(bikeID.getText());
                 String bikegrade = grade.getText();
                 String bikingexperience = experience.getText();
+                String improve = improvements.getText();
 
                 while (!isValidGrade(bikegrade)) {
                     JOptionPane.showMessageDialog(thisframe, "Please enter a valid grade from the specified list");
                     bikegrade = JOptionPane.showInputDialog(thisframe, "Enter grade:");
+
+                    if (bikegrade == null) {
+                        // Handle the cancellation
+                        JOptionPane.showMessageDialog(thisframe, "Grade input canceled. Please provide a valid grade.");
+                        return; // Exit the method without writing to the file
+                    }
                 }
+
 
                 // Write to file
                 writer.write("BikeID: " + ID);
@@ -110,6 +135,8 @@ public class RateBike extends JFrame {
                 writer.write("Bike Rating: " + bikegrade);
                 writer.newLine();
                 writer.write("Experience: " + bikingexperience);
+                writer.newLine();
+                writer.write("Improvements: "+ improve);
                 writer.newLine();
                 writer.newLine();
             } catch (NumberFormatException nfe) {

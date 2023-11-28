@@ -85,7 +85,7 @@ public class IncidentReport extends JFrame {
 
         // Buttons
         cmdSubmit = new JButton("Submit");
-        cmdMenu = new JButton("Retur to Main Menu");
+        cmdMenu = new JButton("Return to Main Menu");
 
         pnlCommand.add(cmdMenu);
         pnlCommand.add(cmdSubmit);
@@ -99,10 +99,11 @@ public class IncidentReport extends JFrame {
         add(pnlDisplay, BorderLayout.CENTER);
         add(pictureDisplay, BorderLayout.NORTH);
         add(pnlCommand, BorderLayout.SOUTH);
-
+    
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(700, 800);
         setLocationRelativeTo(null);
+        setResizable(false);
         setVisible(true);
     }
 
@@ -139,6 +140,11 @@ public class IncidentReport extends JFrame {
         while (!email.matches(emailRegex)) {
             JOptionPane.showMessageDialog(thisframe, "Invalid email format. Please enter a valid email address.", "Error", JOptionPane.ERROR_MESSAGE);
             email = JOptionPane.showInputDialog(thisframe, "Enter email");
+            if (email == null) {
+                // Handle the cancellation
+                JOptionPane.showMessageDialog(thisframe, "Report input canceled.");
+                return "error"; // Exit the method without writing to the file
+            }
         }
     
         return email;
@@ -150,6 +156,11 @@ public class IncidentReport extends JFrame {
         while (!phone.matches(regex)) {
             JOptionPane.showMessageDialog(thisframe, "Invalid phone number format. Please enter a valid phone number.", "Error", JOptionPane.ERROR_MESSAGE);
             phone = JOptionPane.showInputDialog(thisframe, "Enter phone number:");
+            if (phone == null) {
+                // Handle the cancellation
+                JOptionPane.showMessageDialog(thisframe, "Report input canceled.");
+                return "error"; // Exit the method without writing to the file
+            }
         }
 
         return phone;
@@ -161,6 +172,11 @@ public class IncidentReport extends JFrame {
         while (!date.matches(regex)) {
             JOptionPane.showMessageDialog(thisframe, "Invalid date format. Please enter a valid date.", "Error", JOptionPane.ERROR_MESSAGE);
             date = JOptionPane.showInputDialog(thisframe, "Enter date:");
+            if (date == null) {
+                // Handle the cancellation
+                JOptionPane.showMessageDialog(thisframe, "Report input canceled.");
+                return "error"; // Exit the method without writing to the file
+            }
         }
 
         return date;
@@ -172,6 +188,11 @@ public class IncidentReport extends JFrame {
         while (!ID.matches(regex)) {
             JOptionPane.showMessageDialog(thisframe, "Invalid ID number format. Please enter a valid ID number.", "Error", JOptionPane.ERROR_MESSAGE);
             ID = JOptionPane.showInputDialog(thisframe, "Enter ID number:");
+            if (ID == null) {
+                // Handle the cancellation
+                JOptionPane.showMessageDialog(thisframe, "Report input canceled.");
+                return "error"; // Exit the method without writing to the file
+            }
         }
 
         return ID;
@@ -192,11 +213,11 @@ public class IncidentReport extends JFrame {
         }
     }
 
- public class SubmitButtonListener implements ActionListener {
+    public class SubmitButtonListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             cmdSubmit.setEnabled(false);
-
-            try{
+    
+            try {
                 String ID = userIDText.getText();
                 String fullName = usernameText.getText();
                 String phone = userPhone.getText();
@@ -211,89 +232,90 @@ public class IncidentReport extends JFrame {
                 String witnessName = witnessname.getText();
                 String witnessNumber = witnessnumber.getText();
                 String injury;
-                String wit;   
-
-            if (injured) {
-                injury = "Yes";
-                injuredno.setSelected(false);
-            } else {
-                injury = "No";
-                injuredyes.setSelected(false);
-            }
-
-            if (hasWitness) {
-                wit = "Yes";
-                witnessno.setSelected(false);
-            } else {
-                wit = "No";
-                witnessyes.setSelected(false);
-            }
-
-            //System.out.println("File open for writing");
-            if (checkcomplete(ID, fullName, phone, email, date, time, location, incidentDetails)==false){
-                phone=checkphone(phone);
-                email=checkemail(email);
-                date=checkdate(date);
-                ID=checkIdnum(ID);
-
-                if(witnessNumber.isEmpty()){
-                    witnessName="";
-                }else{
-                    witnessName=checkphone(witnessNumber);
+                String wit;
+    
+                if (injured) {
+                    injury = "Yes";
+                    injuredno.setSelected(false);
+                } else {
+                    injury = "No";
+                    injuredyes.setSelected(false);
                 }
-
-                try (BufferedWriter writer = new BufferedWriter(new FileWriter("Incidents.txt", true))) {
-                    // Write each field to the file'
-                    writer.write("ID: " + ID);
-                    writer.newLine();
-                    writer.write("Full Name: " + fullName);
-                    writer.newLine();
-                    writer.write("Phone: " + phone);
-                    writer.newLine();
-                    writer.write("Email: " + email);
-                    writer.newLine();
-                    writer.write("Date: " + date);
-                    writer.newLine();
-                    writer.write("Time: " + time);
-                    writer.newLine();
-                    writer.write("Location: " + location);
-                    writer.newLine();
-                    writer.write("Incident Details: " + incidentDetails);
-                    writer.newLine();
-                    writer.write("Injured: " + injury);
-                    writer.newLine();
-                    writer.write("Injuries Details: " + injuriesDetails);
-                    writer.newLine();
-                    writer.write("Witness: " + wit);
-                    writer.newLine();
-                    writer.write("Witness Name: " + witnessName);
-                    writer.newLine();
-                    writer.write("Witness Number: " + witnessNumber);
-                    writer.newLine();
-                    writer.newLine();
-
-                    JOptionPane.showMessageDialog(thisframe, "Your report has been made");
-                    thisframe.setVisible(false);
-                } 
-                catch (IOException error) {
-                    JOptionPane.showMessageDialog(thisframe, "Error saving to file: " + error.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+    
+                if (hasWitness) {
+                    wit = "Yes";
+                    witnessno.setSelected(false);
+                } else {
+                    wit = "No";
+                    witnessyes.setSelected(false);
+                }
+    
+                if (!checkcomplete(ID, fullName, phone, email, date, time, location, incidentDetails)) {
+                    phone = checkphone(phone);
+                    email = checkemail(email);
+                    date = checkdate(date);
+                    ID = checkIdnum(ID);
+    
+                    if (!phone.equals("error") && !email.equals("error") && !ID.equals("error") && !date.equals("error")) {
+                        if (!witnessNumber.isEmpty()) {
+                            witnessName = checkphone(witnessNumber);
+                        }
+    
+                        try (BufferedWriter writer = new BufferedWriter(new FileWriter("Incidents.txt", true))) {
+                            // Write each field to the file
+                            writer.write("ID: " + ID);
+                            writer.newLine();
+                            writer.write("Full Name: " + fullName);
+                            writer.newLine();
+                            writer.write("Phone: " + phone);
+                            writer.newLine();
+                            writer.write("Email: " + email);
+                            writer.newLine();
+                            writer.write("Date: " + date);
+                            writer.newLine();
+                            writer.write("Time: " + time);
+                            writer.newLine();
+                            writer.write("Location: " + location);
+                            writer.newLine();
+                            writer.write("Incident Details: " + incidentDetails);
+                            writer.newLine();
+                            writer.write("Injured: " + injury);
+                            writer.newLine();
+                            writer.write("Injuries Details: " + injuriesDetails);
+                            writer.newLine();
+                            writer.write("Witness: " + wit);
+                            writer.newLine();
+                            writer.write("Witness Name: " + witnessName);
+                            writer.newLine();
+                            writer.write("Witness Number: " + witnessNumber);
+                            writer.newLine();
+                            writer.newLine();
+    
+                            JOptionPane.showMessageDialog(thisframe, "Your report has been made");
+                            thisframe.setVisible(false);
+                        } catch (IOException error) {
+                            JOptionPane.showMessageDialog(thisframe, "Error saving to file: " + error.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                            thisframe.setVisible(false);
+                        } catch (NumberFormatException nfe) {
+                            JOptionPane.showMessageDialog(thisframe, "Invalid ID number");
+                            thisframe.setVisible(false);
+                        }
+                    } else {
+                        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                        thisframe.setVisible(false);
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(thisframe, "Please fill in all required (*) fields. Return to the main menu to try again", "Error", JOptionPane.ERROR_MESSAGE);
+                    cmdSubmit.setEnabled(true);
                     thisframe.setVisible(false);
                 }
-                catch(NumberFormatException nfe){
-                    JOptionPane.showMessageDialog(thisframe, "Invalid ID number");
-                    thisframe.setVisible(false);
-                }
-            }else{
-                JOptionPane.showMessageDialog(thisframe, "Please fill in all required (*) fields. Return to main menue to Try again", "Error", JOptionPane.ERROR_MESSAGE);
-                cmdSubmit.setEnabled(true);
-                //thisframe.setVisible(false);
+            } finally {
+                System.out.println("");
             }
-                
-        }finally {
-            System.out.println("");
         }
     }
-} 
+    
+
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> new IncidentReport());
     }

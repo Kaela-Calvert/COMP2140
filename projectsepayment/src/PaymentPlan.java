@@ -12,12 +12,14 @@ public class PaymentPlan extends JFrame {
     private static int invoicenumber;
     private int id;
     private String hours;
+    private String person;
     private String baseprice;
     private int cost;
 
     private String cardnum;
     private String cvvnum;
-    private String person;
+    private String first;
+    private String last;
     private String nameCard;
     private String expDate;
     private String paymentdata;
@@ -151,7 +153,7 @@ public class PaymentPlan extends JFrame {
         // Creating the header.
         setTitle("Invoice");
         String numberString = "Invoice # " + String.valueOf(id);
-        String billTo = "Bill to: " + person;
+        String billTo = "Bill to: " + first + " " + last;
         personname = new JLabel(billTo);
         String datestring = "Date: " + String.valueOf(date);
         invoiceheader = new JLabel(numberString);
@@ -185,25 +187,17 @@ public class PaymentPlan extends JFrame {
 
         // Creating buttons
 
-        // back = new JButton("Back");
-        // send = new JButton("Send");
         finish = new JButton("Finish");
 
         // Adding actionlisteners to the buttons
 
-        // back.addActionListener(new BackButtonListener());
         finish.addActionListener(new FinsihButtonListener());
 
         // Adding color to the buttons
 
-        // back.setBackground(Color.GREEN);
-        // send.setBackground(Color.GREEN);
         finish.setBackground(Color.GREEN);
 
         // Adding the buttons to a panel
-
-        // command.add(back);
-        // command.add(send);
         command.add(finish);
 
         // Adding the panels to the frame
@@ -227,7 +221,7 @@ public class PaymentPlan extends JFrame {
     public PaymentPlan(String person) {
         // Getting data from a file.
         getData("uow textfile.txt");
-        this.person = person;
+        this.person = first;
         String enjoy = "Enjoy Your Ride " + person + "!";
 
         // Creating the message
@@ -275,11 +269,12 @@ public class PaymentPlan extends JFrame {
             scan = new Scanner(new File(file));
             while (scan.hasNext()) {
                 String[] line = scan.nextLine().split(" ");
-                person = line[0];
-                hours = line[1];
-                baseprice = line[2];
-                start = line[3];
-                end = line[4];
+                first = line[0];
+                last=line[1];
+                hours = line[2];
+                baseprice = line[3];
+                start = line[4];
+                end = line[5];
 
                 data.add(person);
                 data.add(hours);
@@ -359,12 +354,6 @@ public class PaymentPlan extends JFrame {
         }
     }
 
-    // private class BackButtonListener implements ActionListener {
-    // public void actionPerformed(ActionEvent e) {
-
-    // setVisible(false);
-    // }
-    // }
 
     private class FinsihButtonListener implements ActionListener {
         // Adding functionality to the finish button.

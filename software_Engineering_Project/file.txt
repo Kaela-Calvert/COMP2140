@@ -1,0 +1,16 @@
+1234_Backgate_Excellent_5 stars_true_1000.0_700.0
+1001_StudentUnion_Excellent_5 stars_true_1000.0_700.0
+4826_Backgate_Excellent_5 stars_true_1000.0_700.0
+8941_StudentUnion_Excellent_5 stars_true_1000.0_700.0
+9748_Backgate_Excellent_5 stars_true_1000.0_700.0
+5038_StudentUnion_Excellent_5 stars_true_1000.0_700.0
+4097_Backgate_Excellent_5 stars_true_1000.0_700.0
+5723_ScoSci_Excellent_5 stars_true_1000.0_700.0
+1000_Backgate_Excellent_5 stars_true_1000.0_700.0
+8359_Backgate_Excellent_5 stars_true_1000.0_700.0
+5402_Backgate_Excellent_5 stars_true_1000.0_700.0
+4567_Backgate_Bad_A_true_1000.0_700.0
+6357_Humanities_Excellent_5 stars_true_1000.0_700.0
+7193_Humanities_Excellent_5 stars_true_1000.0_700.0
+3269_ScoSci_Excellent_5 stars_true_1000.0_700.0
+1873_MED_Excellent_5 stars_true_1000.0_700.0

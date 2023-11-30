@@ -1,6 +1,4 @@
-package software_Engineering_Project;
 
-//package utilities;
 
 import java.io.IOException;
 import java.security.SecureRandom;
@@ -20,17 +18,22 @@ public class VerifyEmail {
 
 	Session newSession = null;
 	MimeMessage mimeMessage = null;
-	private String emailReceipients_1 = "KaelaCalvert14@gmail.com";
+	private String emailReceipients_1;
 	private static final String ALPHANUMERIC_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 	private static int length = 10; // specify the length of the generated string
 	private static String randomString;
 
-	public static void main(String args[]) throws AddressException, MessagingException, IOException {
-		VerifyEmail mail = new VerifyEmail();
-		mail.setupServerProperties();
-		mail.draftEmail();
-		mail.sendEmail();
-		System.out.println("Random Alphanumeric String: " + randomString);
+	VerifyEmail(String recipient) throws AddressException, MessagingException, IOException
+
+	{
+		emailReceipients_1 = recipient;
+		this.setupServerProperties();
+		this.draftEmail();
+		this.sendEmail();
+	}
+
+	public static void main(String args[]) throws AddressException, MessagingException, IOException { // randomString);
+		new VerifyEmail("rinaldohalliburton7917@gmail.com");
 
 	}
 
@@ -46,7 +49,7 @@ public class VerifyEmail {
 	}
 
 	private MimeMessage draftEmail() throws AddressException, MessagingException, IOException {
-		// emailReceipients
+
 		randomString = generateRandomAlphanumericString(length);
 		String emailSubject = "Veification";
 		String emailBody = "Your UWI ON WHEELS verification code is: " + randomString;
@@ -57,14 +60,9 @@ public class VerifyEmail {
 
 		MimeBodyPart bodyPart = new MimeBodyPart();
 
-		// MimeBodyPart attachment = new MimeBodyPart();
-
 		bodyPart.setContent(emailBody, "text/html;charset=UTF-8");
-		// attachment.attachFile(new File(""));
 		MimeMultipart multiPart = new MimeMultipart();
 		multiPart.addBodyPart(bodyPart);
-
-		// multiPart.addBodyPart(attachment);
 
 		mimeMessage.setContent(multiPart);
 		return mimeMessage;
